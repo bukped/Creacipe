@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creacipe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url("/img/bg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px; /* Adjust as necessary */
+        }
+        #backToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed/sticky position */
+            bottom: 20px; /* Place the button at the bottom of the page */
+            right: 30px; /* Place the button 30px from the right */
+            z-index: 99; /* Make sure it does not overlap */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: #f59e0b; /* Set a background color */
+            color: white; /* Text color */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 10px; /* Rounded corners */
+            font-size: 18px; /* Increase font size */
+        }
+        #backToTopBtn:hover {
+            background-color: #555; /* Add a dark-grey background on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- start navbar -->
+    <nav class="navbar navbar-expand-lg bg-yellow-500 p-6 flex justify-between items-center">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Creacipe</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="nav-links flex space-x-4" id="navbarNav">
+        <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active text-lg" href="/tentang">Tentang</a>
+        </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+    <!-- end navbar -->
+
+    <!-- start content -->
+    <main class="py-8">
+        <div class="main-content text-center mt-10 mx-auto p-5 bg-white bg-opacity-90 shadow-2xl rounded-lg max-w-2xl"  style="background-image: url('/img/cook3.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="relative p-4">
+                <div class="relative inline-block px-4 py-2 rounded" style="backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.3);">
+                    <h1 class="text-2xl font-bold text-center">Koleksi Resep</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto" style="background-image: url('/img/bg2.png');">
+            {{range .koleksiresep}}
+            <div class="card mb-4 p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold mb-4">{{.Judul}}</h2>
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold">Bahan-bahan:</h3>
+                    <ul>
+                        {{range .BahanList}}
+                        <li>{{.}}</li>
+                        {{end}}
+                    </ul>
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold">Langkah-langkah:</h3>
+                    <ol>
+                        {{range .LangkahList}}
+                        <li>{{.}}</li>
+                        {{end}}
+                    </ol>
+                </div>
+                <div class="flex justify-end">
+                    <a href="/koleksi/edit?id={{.Id}}" class="btn btn-sm btn-warning mr-2">Edit</a>
+                    <a href="/koleksi/delete?id={{.Id}}" onclick="return confirm('Yakin ingin menghapus resep ini?')" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </main>
+    <!-- end content -->
+    <button onclick="topFunction()" id="backToTopBtn" title="Go to top">Top</button>
+    <script>
+        // membuat button
+        let mybutton = document.getElementById("backToTopBtn");
+        //jika scroll kebawah 20px button akan muncul
+        window.onscroll = function() {
+            scrollFunction();
+        };
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        // jika pengguna mengklik button, button akan mengscroll ke atas
+        function topFunction() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
