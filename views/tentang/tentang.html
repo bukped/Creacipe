@@ -5,18 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentang</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body class="font-sans bg-gray-100 m-0 p-0">
-    <header class="bg-yellow-500 text-white p-4 flex justify-between items-center">
-        <div class="logo text-2xl font-bold">Creacipe</div>
-        <nav>
-            <ul class="flex space-x-4 m-0 p-0 list-none">
-                <li><a href="/" class="text-white text-lg no-underline">Menu</a></li>
-                <li><a href="/koleksi" class="text-white text-lg no-underline">Koleksi Resep</a></li>
-                <li><a href="/tentang" class="text-white text-lg no-underline">Tentang</a></li>
-            </ul>
-        </nav>
-    </header>
+    <nav class="navbar navbar-expand-lg bg-yellow-500 p-6 flex justify-between items-center">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Creacipe</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" href="/tentang">Tentang</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
     <main class="p-6 text-center">
         <h1 class="text-2xl mb-6">Tentang</h1>
         <section class="about bg-gray-300 p-4 rounded-lg mx-auto w-4/5 text-left">

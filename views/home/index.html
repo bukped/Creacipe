@@ -37,25 +37,25 @@
 <body>
     <!-- start navbar -->
     <nav class="navbar navbar-expand-lg bg-yellow-500 p-6 flex justify-between items-center">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Creacipe</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="nav-links flex space-x-4" id="navbarNav">
-        <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active text-lg" href="/tentang">Tentang</a>
-        </li>
-        </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Creacipe</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-lg" href="/tentang">Tentang</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
     </nav>
     <!-- end navbar -->
     <!-- start content -->
@@ -109,6 +109,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
+    <!-- start footer -->
+    <footer class="text-center py-4 bg-gray-800 text-white mt-8">
+        &copy; 2023 Creacipe. All rights reserved.
+    </footer>
+    <!-- end footer -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

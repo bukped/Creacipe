@@ -8,24 +8,31 @@ import (
 
 //fungsi untuk mengambil semua data
 func GetAll() []entities.Koleksi {
-	rows, err := config.DB.Query("SELECT * FROM bukuresep")
+	rows, err := config.DB.Query(`
+		SELECT k.id, k.judul, k.bahan, k.langkah, k.gambar, k.jenis_masakan_id, k.tingkat_kesulitan_id, k.created_at, k.updated_at, jm.nama_jenis, tk.nama_level FROM bukuresep k
+		LEFT JOIN jenis_masakan jm ON k.jenis_masakan_id = jm.id
+		LEFT JOIN tingkat_kesulitan tk ON k.tingkat_kesulitan_id = tk.id
+	`)
 	if err != nil {
-		log.Println("Error executing query:",err)
+		log.Println("Error executing query:", err)
 		panic(err)
 	}
 	defer rows.Close()
-	//buat variable untuk menampung seluruh data koleksi yang type nya struct
+
 	var koleksiresep []entities.Koleksi
-	//looping rows
 	for rows.Next() {
 		var koleksi entities.Koleksi
-		//memindahkan nilai dari rows ke var koleksi dengan fungsi scan
-		err := rows.Scan(&koleksi.Id, &koleksi.Judul, &koleksi.Bahan, &koleksi.Langkah, &koleksi.CreatedAt, &koleksi.UpdatedAt)
+		var jenisMasakan entities.JenisMasakan
+		var tingkatKesulitan entities.TingkatKesulitan
+
+		err := rows.Scan(&koleksi.Id, &koleksi.Judul, &koleksi.Bahan, &koleksi.Langkah, &koleksi.Gambar, &koleksi.JenisMasakanID, &koleksi.TingkatKesulitanID, &koleksi.CreatedAt, &koleksi.UpdatedAt, &jenisMasakan.NamaJenis, &tingkatKesulitan.NamaLevel)
 		if err != nil {
 			log.Println("Error scanning row:", err)
 			panic(err)
 		}
-		//memindahkan nilai dari var koleksi ke var koleksi resep
+
+		koleksi.JenisMasakan = jenisMasakan
+		koleksi.TingkatKesulitan = tingkatKesulitan
 		koleksiresep = append(koleksiresep, koleksi)
 	}
 	return koleksiresep
@@ -33,46 +40,64 @@ func GetAll() []entities.Koleksi {
 
 //fungsi untuk menambah data
 func Create(koleksi entities.Koleksi) bool {
-	result, err := config.DB.Exec(
-		"INSERT INTO bukuresep (judul, bahan, langkah, created_at, updated_at) VALUES (?, ?, ?, ?,?)",
-		koleksi.Judul,
-		koleksi.Bahan,
-		koleksi.Langkah,
-		koleksi.CreatedAt,
-		koleksi.UpdatedAt,
-	)
+	_, err := config.DB.Exec(`
+		INSERT INTO bukuresep (judul, bahan, langkah, gambar, jenis_masakan_id, tingkat_kesulitan_id, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+	`, koleksi.Judul,
+	koleksi.Bahan, 
+	koleksi.Langkah, 
+	koleksi.Gambar, 
+	koleksi.JenisMasakanID, 
+	koleksi.TingkatKesulitanID, 
+	koleksi.CreatedAt, 
+	koleksi.UpdatedAt)
+
 	if err != nil {
-		panic(err)
+		log.Println("Error executing query:", err)
+		return false
 	}
-	//mengambil id terakhir
-	lastInsertId, err := result.LastInsertId()
-	if err != nil {
-		panic(err)
-	}
-	return lastInsertId > 0
+	return true
 }
 
 //mengambil data berdasarkan id 
-func Detail(id int) entities.Koleksi {
-	row := config.DB.QueryRow(`SELECT id, judul, bahan, langkah FROM bukuresep WHERE id = ? `, id)
+func Detail(id int) (entities.Koleksi, bool) {
 	var koleksi entities.Koleksi
-	if err := row.Scan(&koleksi.Id, &koleksi.Judul, &koleksi.Bahan, &koleksi.Langkah); err != nil {
-		panic(err.Error())
+	var jenisMasakan entities.JenisMasakan
+	var tingkatKesulitan entities.TingkatKesulitan
+
+	row := config.DB.QueryRow(`
+		SELECT k.id, k.judul, k.bahan, k.langkah, k.gambar, k.jenis_masakan_id, k.tingkat_kesulitan_id, k.created_at, k.updated_at,
+		jm.nama_jenis, tk.nama_level
+		FROM bukuresep k
+		LEFT JOIN jenis_masakan jm ON k.jenis_masakan_id = jm.id
+		LEFT JOIN tingkat_kesulitan tk ON k.tingkat_kesulitan_id = tk.id
+		WHERE k.id = ?
+	`, id)
+
+	err := row.Scan(&koleksi.Id, &koleksi.Judul, &koleksi.Bahan, &koleksi.Langkah, &koleksi.Gambar, &koleksi.JenisMasakanID, &koleksi.TingkatKesulitanID, &koleksi.CreatedAt, &koleksi.UpdatedAt, &jenisMasakan.NamaJenis, &tingkatKesulitan.NamaLevel)
+	if err != nil {
+		log.Println("Error scanning row:", err)
+		return koleksi, false
 	}
-	return koleksi
+
+	koleksi.JenisMasakan = jenisMasakan
+	koleksi.TingkatKesulitan = tingkatKesulitan
+	return koleksi, true
 }
 
 //fungsi untuk update
-func Update(id int, koleksi entities.Koleksi) bool {
-	query, err := config.DB.Exec(`UPDATE bukuresep SET judul = ?, bahan = ?, langkah = ? , updated_at = ? where id = ?`, koleksi.Judul, koleksi.Bahan, koleksi.Langkah, koleksi.UpdatedAt, id)
+func Update(koleksi entities.Koleksi) bool {
+	_, err := config.DB.Exec(`
+		UPDATE bukuresep
+		SET judul = ?, bahan = ?, langkah = ?, gambar = ?, jenis_masakan_id = ?, tingkat_kesulitan_id = ?, updated_at = ?
+		WHERE id = ?
+	`, koleksi.Judul, koleksi.Bahan, koleksi.Langkah, koleksi.Gambar, koleksi.JenisMasakanID, koleksi.TingkatKesulitanID, koleksi.UpdatedAt, koleksi.Id)
+
 	if err != nil {
-		panic(err)
+		log.Println("Error executing query:", err)
+		return false
 	}
-	result, err := query.RowsAffected()
-	if err != nil {
-		panic(err)
-	}
-	return result > 0
+	return true
 }
 
 //fungsi untuk delete
@@ -80,3 +105,38 @@ func Delete(id int) error {
 	_, err := config.DB.Exec("DELETE FROM bukuresep WHERE id = ?", id)
 	return err
 }
+
+//fungsi search
+func Search(query string) []entities.Koleksi {
+	rows, err := config.DB.Query(`
+			SELECT k.id, k.judul, k.bahan, k.langkah, k.gambar, k.jenis_masakan_id, k.tingkat_kesulitan_id, k.created_at, k.updated_at, jm.nama_jenis, tk.nama_level
+			FROM bukuresep k
+			LEFT JOIN jenis_masakan jm ON k.jenis_masakan_id = jm.id
+			LEFT JOIN tingkat_kesulitan tk ON k.tingkat_kesulitan_id = tk.id
+			WHERE LOWER(k.judul) LIKE ? OR LOWER(k.bahan) LIKE ? OR LOWER(jm.nama_jenis) LIKE ? OR LOWER(tk.nama_level) LIKE ?
+	`, "%"+query+"%", "%"+query+"%", "%"+query+"%", "%"+query+"%")
+	if err != nil {
+			log.Println("Error executing query:", err)
+			panic(err)
+	}
+	defer rows.Close()
+
+	var koleksiresep []entities.Koleksi
+
+	for rows.Next() {
+			var koleksi entities.Koleksi
+			var jenisMasakan entities.JenisMasakan
+			var tingkatKesulitan entities.TingkatKesulitan
+			err := rows.Scan(&koleksi.Id, &koleksi.Judul, &koleksi.Bahan, &koleksi.Langkah, &koleksi.Gambar, &koleksi.JenisMasakanID, &koleksi.TingkatKesulitanID, &koleksi.CreatedAt, &koleksi.UpdatedAt, &jenisMasakan.NamaJenis, &tingkatKesulitan.NamaLevel)
+			if err != nil {
+					log.Println("Error scanning row:", err)
+					panic(err)
+			}
+			koleksi.JenisMasakan = jenisMasakan
+			koleksi.TingkatKesulitan = tingkatKesulitan
+			koleksiresep = append(koleksiresep, koleksi)
+	}
+
+	return koleksiresep
+}
+

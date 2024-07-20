@@ -19,30 +19,25 @@
 <body class="bg-gray-100">
     <!-- start navbar -->
     <nav class="navbar navbar-expand-lg bg-yellow-500 p-6 flex justify-between items-center">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Creacipe</a>
-      <button class="navbar-toggler"type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="nav-links flex space-x-4" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active text-lg" href="/tentang">Tentang</a>
-          </li>
-        </ul>
+      <div class="container-fluid">
+          <a class="navbar-brand" href="/">Creacipe</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                      <a class="nav-link active text-lg" aria-current="page" href="/">Menu</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active text-lg" href="/koleksi">Koleksi Resep</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active text-lg" href="/tentang">Tentang</a>
+                  </li>
+              </ul>
+          </div>
       </div>
-    </div>
   </nav>
     <!-- end navbar -->
     <!-- start form -->
@@ -54,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <form  class="w-3/4 mx-auto bg-gray-200 rounded-lg p-8" action="/koleksi/edit" method="POST">
+        <form  class="w-3/4 mx-auto bg-gray-200 rounded-lg p-8" action="/koleksi/edit" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="id" value="{{ .koleksi.Id }}" />
             <div class="form-group">
                 <label for="nama-resep" class="block mb-1">Nama Resep:</label>
@@ -72,6 +67,26 @@
                 {{.koleksi.Langkah}}
                 </textarea>
             </div>
+            <div class="mb-4">
+              <label for="gambar" class="block text-gray-700">Gambar</label>
+              <input type="file" name="gambar" id="gambar" value="{{.Gambar}}" accept="image/*" class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" />
+            </div>
+            <div class="mb-4">
+              <label for="jenis_masakan_id" class="block text-lg font-medium text-gray-700">Jenis Masakan:</label>
+              <select id="jenis_masakan_id" name="jenis_masakan_id" class="mt-1 p-2 w-full border rounded">
+                  <option value="1" {{if eq .koleksi.JenisMasakanID 1}}selected{{end}}>Masakan Nusantara</option>
+                  <option value="2" {{if eq .koleksi.JenisMasakanID 2}}selected{{end}}>Masakan Barat</option>
+                  <option value="3" {{if eq .koleksi.JenisMasakanID 3}}selected{{end}}>Masakan Asia</option>
+              </select>
+          </div>
+          <div class="mb-4">
+              <label for="tingkat_kesulitan_id" class="block text-lg font-medium text-gray-700">Tingkat Kesulitan:</label>
+              <select id="tingkat_kesulitan_id" name="tingkat_kesulitan_id" class="mt-1 p-2 w-full border rounded">
+                  <option value="1" {{if eq .koleksi.TingkatKesulitanID 1}}selected{{end}}>Mudah</option>
+                  <option value="2" {{if eq .koleksi.TingkatKesulitanID 2}}selected{{end}}>Sedang</option>
+                  <option value="3" {{if eq .koleksi.TingkatKesulitanID 3}}selected{{end}}>Sulit</option>
+              </select>
+          </div>
             <div class="mt-5">
               <button type="submit" class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg btn btn-primary btn-sm">Simpan</button>
               <div class="mt-5">

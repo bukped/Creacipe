@@ -30,6 +30,11 @@ func main() {
 	http.HandleFunc("/tentang", tentangcontroller.Tentang)
 	// 7. menghandler untuk url pacth img
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("assets/img/"))))
+	// 8. menghandler upload
+	http.Handle("/upload/", http.StripPrefix("/upload/", http.FileServer(http.Dir("upload"))))
+	// 9. fitur search
+	http.HandleFunc("/koleksi/search", koleksicontroller.Search)
+
 	//run server
 	log.Println("Server running on port 8080")
 	http.ListenAndServe("localhost:8080", nil)

@@ -6,12 +6,26 @@ import (
 )
 
 type Koleksi struct {
-	Id        uint
+	Id        int
 	Judul     string
 	Bahan     string
 	Langkah   string
+	Gambar    string
+	JenisMasakanID      int
+	TingkatKesulitanID  int
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	JenisMasakan JenisMasakan
+	TingkatKesulitan TingkatKesulitan
+}
+type JenisMasakan struct {
+	Id        int
+	NamaJenis string
+}
+
+type TingkatKesulitan struct {
+	Id        int
+	NamaLevel string
 }
 
 // Method to split Bahan agar ke bawah 
